@@ -7,7 +7,7 @@ class Trellis:
     self.col = None # will be a list of nodes
 
     def create_next_col(self):
-      # calls create_next_nodes for all of the nodes in self.col
+      # calls create_next_nodes(node, transition_bits) for all of the nodes in self.col
       # then, groups all of the next_nodes by state id (eg '00') and keeps the one with the
       #     smallest path metric from each group
       pass

@@ -1,4 +1,4 @@
-from node import Node 
+from node import Node
 
 
 class Trellis:
@@ -14,8 +14,8 @@ class Trellis:
     """
       creating the trellis transition information
     """
-    lookup_table = {} 
-    for i in range(2**(self.k-1)): # for each node in the column 
+    lookup_table = {}
+    for i in range(2**(self.k-1)): # for each node in the column
       key = int_to_bin_string(i, self.k)
       transition_info = []
       for i in ["0", "1"]: #for both possible message bits (1 or 0)
@@ -43,11 +43,12 @@ def int_to_bin_string(integer, length):
   return bin_string
 
 def bin_string_dot_product(string1, string2):
-  and_int = int(string1, 2) & int(string2, 2) 
+  and_int = int(string1, 2) & int(string2, 2)
   and_string = int_to_bin_string(and_int, len(string1)) #bitwise and of the two strings
   sum_int = sum([int(i) for i in and_string]) # sum of the digits in the bitwise and
   return str(sum_int %2) #returning as a string mod 2
 
 if __name__ == '__main__':
-  t = Trellis(["1110", "1100"], "111000")
-  print t.lookup_table
+  t = Trellis(["111", "110"], "111000")
+  for node in t.col[0].create_next_nodes('00'):
+    print node.historical_path

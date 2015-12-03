@@ -53,12 +53,13 @@ class Trellis:
       goes through each message bit creating a new column in the trellis and returning the path 
       with the lowest path metric
     """
-    for i in range(len(self.rcv_bits)-1):
-      start = i
-      end = i+len(self.gen_polys)
+    start = 0
+    while start < (len(self.rcv_bits)-1):
+      end = start+len(self.gen_polys)
       self.create_next_col(self.rcv_bits[start:end]) #slide window with 
+      start += len(self.gen_polys)
     sorted_col = sorted(self.col, key=lambda x: x.path_metric, reverse=False) #sort by path metric
-    return sorted_col[0].historical_path[2:] # returns the path with the lowest path_metric 
+    return sorted_col[0].historical_path[:-2] # returns the path with the lowest path_metric 
 
 
 

@@ -29,11 +29,38 @@ class Trellis:
 
 
 
-  def create_next_col(self):
+  def create_next_col(self, message_bits):
     # calls create_next_nodes(node, transition_bits) for all of the nodes in self.col
-    # then, groups all of the next_nodes by state id (eg '00') and keeps the one with the
+    node_canditates = []
+    new_column = []
+    for node in self.col:
+      single_list = node.create_next_nodes(message_bits) #nodes a single prev node could go to
+      node_canditates.append(single_list[0])
+      node_canditates.append(single_list[1])
+    for key in self.lookup_table:
+      # then, groups all of the next_nodes by state id (eg '00') and keeps the one with the
+      filtered_candidate_nodes = [n for n in node_canditates if n.historical_path[:self.k-1] == key]
+      #TODO: create_next_nodes() should not need any arguments
+      if len(filtered_candidate_nodes) >= 1:
+        sorted_list = sorted(filtered_candidate_nodes, key=lambda x: x.path_metric, reverse=False)
+        new_column.append(sorted_list[0])
     #     smallest path metric from each group
-    pass
+    self.col = new_column
+
+
+  def decode_message(self):
+    """
+      goes through each message bit creating a new column in the trellis and returning the path 
+      with the lowest path metric
+    """
+    for i in range(len(self.rcv_bits)-1):
+      start = i
+      end = i+len(self.gen_polys)
+      self.create_next_col(self.rcv_bits[start:end]) #slide window with 
+    sorted_col = sorted(self.col, key=lambda x: x.path_metric, reverse=False) #sort by path metric
+    return sorted_col[0].historical_path[2:] # returns the path with the lowest path_metric 
+
+
 
 def int_to_bin_string(integer, length):
   bin_string = bin(integer)[2:] #slice off the 0b
@@ -50,5 +77,4 @@ def bin_string_dot_product(string1, string2):
 
 if __name__ == '__main__':
   t = Trellis(["111", "110"], "111000")
-  for node in t.col[0].create_next_nodes('00'):
-    print node.historical_path
+  print t.decode_message()

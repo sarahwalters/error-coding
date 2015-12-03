@@ -59,7 +59,8 @@ class Trellis:
       self.create_next_col(self.rcv_bits[start:end]) #slide window with 
       start += len(self.gen_polys)
     sorted_col = sorted(self.col, key=lambda x: x.path_metric, reverse=False) #sort by path metric
-    return sorted_col[0].historical_path[:-2] # returns the path with the lowest path_metric 
+    backwards_message = sorted_col[0].historical_path[:-2] # returns the path with the lowest path_metric 
+    return backwards_message[::-1]
 
 
 
@@ -77,5 +78,5 @@ def bin_string_dot_product(string1, string2):
   return str(sum_int %2) #returning as a string mod 2
 
 if __name__ == '__main__':
-  t = Trellis(["111", "110"], "111000")
+  t = Trellis(["111", "110"], "111011000110")
   print t.decode_message()

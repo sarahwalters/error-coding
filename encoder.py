@@ -1,4 +1,5 @@
 import random
+import string_utils
 
 class Encoder:
   def __init__(self, gen_polys, mesg, err_rate):
@@ -11,20 +12,9 @@ class Encoder:
     self.err_rate = err_rate
     self.k = len(gen_polys[0]) #The window size
     self.r = len(gen_polys) #The number of parity bits made
-    self.mesg = '0'*(self.k-1)+mesg+'0'*(self.k-1)
+    self.mesg = '0'*(self.k-1)+mesg
     self.encoded = self.__encode()
-  
-  def __str_dot(self,s1,s2):
-    """
-    Calculates a dot product between bitstrings.
-    """
-    if len(s1)!=len(s2):
-      raise Exception("Input bitstrings are not same length!")
-    tmp_sum = 0
-    for i in range(len(s1)):
-      tmp_sum ^= (int(s1[i]) & int(s2[i])) #performs sum(a[i]*b[i]) on bins
-    return str(tmp_sum)
-    
+
 
   def __encode(self):
     """
@@ -33,10 +23,10 @@ class Encoder:
     tmp_msg = ""
     for i in range(len(self.mesg)-self.k+1):
       for g in self.gen_polys:
-        last = self.__str_dot(self.mesg[i:i+self.k], g[::-1]) #reading g 'backwards'
+        last = string_utils.str_dot(self.mesg[i:i+self.k], g[::-1]) # reverse g
         tmp_msg+=last
     return tmp_msg
-        
+
 
   def send(self):
     """
@@ -50,7 +40,7 @@ class Encoder:
     return ''.join([str(x) for x in noisy_msg])
 
 if __name__ == '__main__':
-  polys =  ('1011','1111')
-  a = Encoder(polys,'10111',0.1)
+  polys =  ('111','110')
+  a = Encoder(polys,'101100',0.1)
   print a.encoded
   print a.send()

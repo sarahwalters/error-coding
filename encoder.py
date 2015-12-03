@@ -33,14 +33,19 @@ class Encoder:
     Takes the encoded message and causes errors
     I repent for ugly string manipulation! >_<
     """
+    count = 0
     noisy_msg = [int(x) for x in self.encoded]
     for i in range(len(noisy_msg)):
       if random.random()<=self.err_rate:
         noisy_msg[i]=noisy_msg[i]^1
+        count+=1
+    print count, 'error(s) generated at', self.err_rate,'error rate.'
     return ''.join([str(x) for x in noisy_msg])
 
 if __name__ == '__main__':
-  polys =  ('111','110')
-  a = Encoder(polys,'101100',0.1)
-  print a.encoded
-  print a.send()
+  #This particular test case from http://wits.ice.nsysu.edu.tw/course/pdfdownload/93_2/%E9%8C%AF%E8%AA%A4%E6%9B%B4%E6%AD%A3%E7%A2%BC/CC-ConvolutionalCode.pdf  
+  polys =  ('1011','1111')
+  a = Encoder(polys,'10111',0.1)
+  print "Input Message with 0 padding is", a.mesg
+  print "Message encodes as", a.encoded
+  print a.send(), "is noisy message"

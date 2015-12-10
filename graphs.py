@@ -13,6 +13,7 @@ def accuracy_vs_rate():
   rates = [1/float(recip) for recip in rate_reciprocals]
 
   # plot and format
+  fig = plt.figure()
   plt.plot(rates, accuracies, 'ro', markersize=10)
   plt.title('Accuracy vs. Rate for k=%s, BER=%s' % (len(polys[0]), ber))
   plt.xlabel('Rate, 1/r')

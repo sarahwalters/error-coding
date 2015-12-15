@@ -23,6 +23,22 @@ def accuracy_vs_rate():
   fig.savefig('imgs/accuracy_vs_rate.png')
   return rates, accuracies
 
+def accuracy_vs_bit_error_rate():
+  # calculate accuracy as bit error rate increases
+  num_iterations = 100
+  polys = ('1011', '1111', '0101', '1101', '1010', '1001', '0110')
+  bers = [0.005*i for i in range(0,101)]
+  accuracies = [accuracy(polys, ber, num_iterations) for ber in bers]
+
+# plot and foramt results
+  plt.plot(bers, accuracies, 'ro', markersize=10)
+  plt.title('Accuracy vs. Bit Error Rate for k=%s, Rate=%s' % (4, 1/7))
+  plt.xlabel('Bit Error Rate')
+  plt.ylabel('Hamming distance over 1000 bits')
+  plt.show()
+  fig = plt.gcf()
+  fig.savefig('imgs/accuracy_vs_bit_error_rate.png')
+  return ber, accuracies
 
 def accuracy(polys, ber, num_iterations):
   sum_error = 0
@@ -60,5 +76,5 @@ def accuracy_vs_windowsz(max_window = 10):
 
 
 if __name__ == '__main__':
-  #print accuracy_vs_rate()
-  accuracy_vs_windowsz()
+  print accuracy_vs_bit_error_rate()
+
